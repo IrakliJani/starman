@@ -2,6 +2,39 @@ body {
   margin: 0;
 }
 
-.container, .container.point {
-  cursor: crosshair;
+pre {
+  margin: 0 20px;
+  overflow: scroll;
 }
+
+.container {
+  display: flex;
+  width: 1000px;
+  height: 600px;
+}
+
+  .graph {
+    background-color: #EFEFEF;
+    position: relative;
+    overflow-y: scroll;
+    width: 800px;
+  }
+
+  .graph, .graph.point {
+    cursor: crosshair;
+    user-select: none;
+  }
+
+    .point {
+      position: absolute;
+      border-radius: 100%;
+      background-color: black;
+    }
+
+    .point:hover {
+      background-color: red !important;
+    }
+
+    .point:active {
+      background-color: green !important;
+    }
