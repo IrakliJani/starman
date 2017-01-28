@@ -21,7 +21,7 @@ const pointView = point =>
   div('.point', { attrs: { id: point.i }, style: pointStyle(point, { size: 10 }) })
 
 const tableView = points =>
-  pre(points.map(point => `${point.x}\t${point.y}\n`))
+  pre(points.map(point => `${point.i}\t${point.x}\t${point.y}\n`))
 
 function main ({ DOM }) {
   const container = DOM.select('.graph')
