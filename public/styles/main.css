@@ -3,26 +3,36 @@ body {
 }
 
 pre {
-  margin: 0 20px;
+  margin: 0;
+  padding: 0 20px;
   overflow: scroll;
 }
 
 .container {
   display: flex;
-  width: 1000px;
-  height: 600px;
+  width: 1120px;
+  height: 620px;
 }
 
   .graph {
     background-color: #EFEFEF;
     position: relative;
     overflow-y: scroll;
-    width: 800px;
+    overflow-x: hidden;
+    user-select: none;
+  }
+
+  .graph * {
+    user-select: none;
+  }
+
+  pre {
+    width: 300px;
+    box-sizing: border-box;
   }
 
   .graph, .graph.point {
     cursor: crosshair;
-    user-select: none;
   }
 
     .point {

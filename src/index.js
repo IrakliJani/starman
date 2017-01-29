@@ -1,24 +1,47 @@
 // import xs from 'xstream'
 import { run } from '@cycle/xstream-run'
-import throttle from 'xstream/extra/throttle'
 import { makeDOMDriver, div, pre } from '@cycle/dom'
-import { csv1 } from './data'
+import { test } from './data'
 
-const points = csv1
+const points = test
   .trim()
   .split(/\n/)
   .map(p => p.split(','))
   .map((p, i) => ({ i, x: +p[0], y: +p[1] }))
 
+const gap = 20
+const width = 800
+const height = 600
+
+const xs = points.map(p => p.x)
+const ys = points.map(p => p.y)
+const xBounds = { min: Math.min(...xs), max: Math.max(...xs) }
+const yBounds = { min: Math.min(...ys), max: Math.max(...ys) }
+const xRange = xBounds.max - xBounds.min
+const yRange = yBounds.max - yBounds.min
+
+const getScreenX = point => (point.x - xBounds.min) * width / xRange + gap
+const getScreenY = point => (point.y - yBounds.min) * height / yRange + gap
+const getPointY = point => yBounds.min + (height - point.y + gap) / height * yRange
+
+const px = size => `${size}px`
+
 const pointStyle = (point, opts = { size: 6 }) => ({
-  width: opts.size + 'px',
-  height: opts.size + 'px',
-  left: point.i * opts.size * 2 - opts.size / 2 + 'px',
-  top: point.y * 500 - opts.size / 2 + 'px'
+  width: px(opts.size),
+  height: px(opts.size),
+  left: px(getScreenX(point) - opts.size / 2),
+  bottom: px(getScreenY(point) - opts.size / 2)
+})
+
+const graphStyle = (gap, width, height) => ({
+  padding: px(gap),
+  minWidth: px(width),
+  maxWidth: px(width),
+  height: px(height)
 })
 
 const pointView = point =>
-  div('.point', { attrs: { id: point.i }, style: pointStyle(point, { size: 10 }) })
+  div('.point', { attrs: { id: point.i }, style: pointStyle(point) })
 
 const tableView = points =>
   pre(points.map(point => `${point.i}\t${point.x}\t${point.y}\n`))
@@ -32,19 +55,18 @@ function main ({ DOM }) {
 
   const dom$ = start$
     .map(({ target }) => move$
-      .map(event => ({ i: +target.id, y: event.y }))
-      .compose(throttle(10))
+      .map(event => ({ i: +target.id, y: getPointY(event) }))
       .endWhen(stop$.take(1))
     )
     .flatten()
     .map(({ i, y }) => {
-      points[i].y = y / 500
+      points[i].y = y
       return points
     })
     .startWith(points)
-    .map(points =>
+    .map((points) =>
       div('.container', [
-        div('.graph',
+        div('.graph', { style: graphStyle(gap, width, height) },
           points.map(pointView)
         ),
         tableView(points)
