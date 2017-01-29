@@ -8,7 +8,9 @@ const points = data
   .trim()
   .split(/\n/)
   .map(p => p.split(','))
-  .map((p, i) => ({ i, x: +p[0], y: +p[1] }))
+  .map(p => ({ x: +p[0], y: +p[1] }))
+  .sort((a, b) => a.x - b.x)
+  .map((p, i) => ({ i, ...p }))
 
 const gap = 20
 const width = 800
