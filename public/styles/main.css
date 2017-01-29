@@ -4,14 +4,14 @@ body {
 
 pre {
   margin: 0;
-  padding: 0 20px;
+  padding: 0 10px;
   overflow: scroll;
 }
 
 .container {
   display: flex;
   width: 1120px;
-  height: 620px;
+  max-height: 640px;
 }
 
   .graph {

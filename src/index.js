@@ -1,9 +1,10 @@
 // import xs from 'xstream'
 import { run } from '@cycle/xstream-run'
+import throttle from 'xstream/extra/throttle'
 import { makeDOMDriver, div, pre } from '@cycle/dom'
-import { test } from './data'
+import { csv2 as data } from './data'
 
-const points = test
+const points = data
   .trim()
   .split(/\n/)
   .map(p => p.split(','))
@@ -20,9 +21,16 @@ const yBounds = { min: Math.min(...ys), max: Math.max(...ys) }
 const xRange = xBounds.max - xBounds.min
 const yRange = yBounds.max - yBounds.min
 
+const fromRange = (min, max) => value => {
+  if (value < min) return min
+  if (value > max) return max
+  else return value
+}
+
+const fromRangeY = fromRange(yBounds.min, yBounds.max)
 const getScreenX = point => (point.x - xBounds.min) * width / xRange + gap
 const getScreenY = point => (point.y - yBounds.min) * height / yRange + gap
-const getPointY = point => yBounds.min + (height - point.y + gap) / height * yRange
+const getPointY = point => fromRangeY(yBounds.min + (height - point.y + gap) / height * yRange)
 
 const px = size => `${size}px`
 
@@ -44,7 +52,7 @@ const pointView = point =>
   div('.point', { attrs: { id: point.i }, style: pointStyle(point) })
 
 const tableView = points =>
-  pre(points.map(point => `${point.i}\t${point.x}\t${point.y}\n`))
+  pre(points.map(point => `${point.x.toFixed(4)}\t${point.y.toFixed(3)}\n`))
 
 function main ({ DOM }) {
   const container = DOM.select('.graph')
@@ -56,6 +64,7 @@ function main ({ DOM }) {
   const dom$ = start$
     .map(({ target }) => move$
       .map(event => ({ i: +target.id, y: getPointY(event) }))
+      .compose(throttle(5))
       .endWhen(stop$.take(1))
     )
     .flatten()
