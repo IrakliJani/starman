@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@cycle/dom": "14.3.x",
-    "@cycle/xstream-run": "4.2.0",
-    "xstream": "9.3.0"
+    "@cycle/most-run": "^4.4.0",
+    "most": "^1.2.1"
   },
   "scripts": {
     "start": "cycle-scripts start",

@@ -1,6 +1,5 @@
 // import xs from 'xstream'
-import { run } from '@cycle/xstream-run'
-import throttle from 'xstream/extra/throttle'
+import { run } from '@cycle/most-run'
 import { makeDOMDriver, div, pre } from '@cycle/dom'
 import { csv2 as data } from './data'
 
@@ -59,18 +58,18 @@ const tableView = points =>
 function main ({ DOM }) {
   const container = DOM.select('.graph')
 
-  const start$ = container.events('mousedown').filter(ev => ev.target.className === 'point')
+  const start$ = container.events('mousedown')
+    .filter(ev => ev.target.className === 'point')
   const move$ = container.events('mousemove')
   const stop$ = container.events('mouseup')
 
   const dom$ = start$
-    .map(({ target }) => move$
+    .flatMap(({ target }) => move$
+      .throttle(5)
+      .until(stop$.take(1))
       .map(event => ({ i: +target.id, y: getPointY(event) }))
-      .compose(throttle(5))
-      .endWhen(stop$.take(1))
     )
-    .flatten()
-    .map(({ i, y }) => {
+    .map(({i, y}) => {
       points[i].y = y
       return points
     })
