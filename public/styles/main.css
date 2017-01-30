@@ -16,10 +16,10 @@ pre {
 
   .graph {
     background-color: #EFEFEF;
-    position: relative;
     overflow-y: scroll;
     overflow-x: hidden;
     user-select: none;
+    position: relative;
   }
 
   .graph * {

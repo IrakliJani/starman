@@ -64,10 +64,11 @@ function main ({ DOM }) {
   const stop$ = container.events('mouseup')
 
   const dom$ = start$
-    .flatMap(({ target }) => move$
-      .throttle(5)
-      .until(stop$.take(1))
-      .map(event => ({ i: +target.id, y: getPointY(event) }))
+    .flatMap(({ target }) =>
+      move$
+        .throttle(5)
+        .until(stop$.take(1))
+        .map(event => ({ i: +target.id, y: getPointY(event) }))
     )
     .map(({i, y}) => {
       points[i].y = y
