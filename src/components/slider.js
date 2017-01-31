@@ -9,15 +9,10 @@ export default function Slider (sources) {
     .map(ev => ev.target.value)
 
   const state$ = props$
-    .flatMap(props => newValue$
-      .map(val => ({
-        label: props.label,
-        unit: props.unit,
-        min: props.min,
-        value: val,
-        max: props.max
-      }))
-      .startWith(props)
+    .flatMap(props =>
+      newValue$
+        .map(value => ({ ...props, value }))
+        .startWith(props)
     )
 
   const vdom$ = state$.map(state =>

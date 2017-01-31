@@ -1,11 +1,13 @@
 body {
   margin: 0;
+  user-select: none;
 }
 
 pre {
   margin: 0;
   padding: 0 10px;
   overflow: scroll;
+  user-select: all;
 }
 
 .container {
@@ -18,12 +20,7 @@ pre {
     background-color: #EFEFEF;
     overflow-y: scroll;
     overflow-x: hidden;
-    user-select: none;
     position: relative;
-  }
-
-  .graph * {
-    user-select: none;
   }
 
   pre {

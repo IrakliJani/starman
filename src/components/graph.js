@@ -1,6 +1,5 @@
 import { combineArray } from 'most'
 import { div } from '@cycle/dom'
-import coordFromParams from 'utils/coords'
 
 let px = size => `${size}px`
 
@@ -21,33 +20,29 @@ let graphStyle = ({ gap, width, height }) => ({
 let pointView = (id, x, y, pointSize) =>
   div('.point', { key: id, attrs: { id: id }, style: pointStyle(x, y, pointSize) })
 
-// let tableView = points =>
-//   pre(points.map(point => `${point.x.toFixed(4)}\t${point.y.toFixed(3)}\n`))
-
 export default function main ({
   DOM,
   points: points$,
   pointSize: pointSize$,
-  sizes: sizes$
+  sizes: sizes$,
+  coords: coords$
 }) {
   let container = DOM.select('.graph')
 
-  const start$ = container.events('mousedown')
+  let start$ = container.events('mousedown')
     .filter(ev => ev.target.className === 'point')
-  const move$ = container.events('mousemove')
-  const stop$ = container.events('mouseup')
+  let move$ = container.events('mousemove')
+  let stop$ = container.events('mouseup')
 
-  let patches$ = start$.flatMap(({ target }) => {
+  let patches$ = start$.flatMap(({ target, currentTarget }) => {
     return move$
       .throttle(10)
       .until(stop$.take(1))
-      .map(({ y }) => ({ i: +target.id, y: y }))
+      .map(({ y }) => ({ i: +target.id, y: y - currentTarget.offsetTop + window.pageYOffset }))
   })
 
-  let patchedPoints$ = combineArray(Array, [points$, sizes$])
-    .map(([points, sizes]) => {
-      let coords = coordFromParams(points, sizes)
-
+  let patchedPoints$ = combineArray(Array, [points$, coords$])
+    .map(([points, coords]) => {
       return patches$.map(patch => {
         points[patch.i].y = coords.getPointY(patch.y)
         return points
@@ -56,10 +51,8 @@ export default function main ({
     .startWith(points$)
     .flatMap(x => x)
 
-  let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, sizes$])
-    .map(([points, pointSize, sizes]) => {
-      let coords = coordFromParams(points, sizes)
-
+  let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, sizes$, coords$])
+    .map(([points, pointSize, sizes, coords]) => {
       return div('.container', [
         div('.graph', { style: graphStyle(sizes) },
           points.map(point => {

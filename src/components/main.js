@@ -3,6 +3,8 @@ import { div } from '@cycle/dom'
 import Graph from 'components/graph'
 import Slider from 'components/slider'
 
+import coordFromParams from 'utils/coords'
+
 import { csv2 as data } from 'data'
 
 let points = data
@@ -13,12 +15,17 @@ let points = data
   .sort((a, b) => a.x - b.x)
   .map((p, i) => ({ i, ...p }))
 
-let points$ = just(points)
-let sizes$ = just({
+let sizes = {
   width: 800,
   height: 600,
   gap: 20
-})
+}
+
+let coords = coordFromParams(points, sizes)
+
+let points$ = just(points)
+let sizes$ = just(sizes)
+let coords$ = just(coords)
 
 export default function main ({ DOM }) {
   let { DOM: sliderVDom$, value: sliderValue$ } = Slider({
@@ -29,14 +36,15 @@ export default function main ({ DOM }) {
     DOM,
     pointSize: sliderValue$,
     points: points$,
-    sizes: sizes$
+    sizes: sizes$,
+    coords: coords$
   })
 
   return {
     DOM: combineArray(Array, [graphVDom$, sliderVDom$])
       .map(([graphVDom, sliderVDom]) =>
         div('.main_container', [
-          // div('graphviz'),
+          div('graphviz'),
           graphVDom,
           sliderVDom
         ])
