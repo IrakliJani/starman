@@ -37,8 +37,8 @@ pre {
 
     .point {
       position: absolute;
-      border-radius: 100%;
       background-color: black;
+      border-radius: 50%;
     }
 
     .point:hover {

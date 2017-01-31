@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-plugin-module-resolver": "^2.4.0",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.22.0",
     "cycle-scripts-es-webpack": "0.3.0"
   },
   "dependencies": {
     "@cycle/dom": "14.3.x",
     "@cycle/most-run": "^4.4.0",
-    "most": "^1.2.1"
+    "most": "^1.2.1",
+    "xstream": "^9.3.0"
   },
   "scripts": {
     "start": "cycle-scripts start",
@@ -22,7 +25,16 @@
       "es2015"
     ],
     "plugins": [
-      "transform-object-rest-spread"
+      "transform-object-rest-spread",
+      "transform-export-extensions",
+      [
+        "module-resolver",
+        {
+          "root": [
+            "./src"
+          ]
+        }
+      ]
     ]
   }
 }
