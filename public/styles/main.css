@@ -12,14 +12,12 @@ pre {
 
 .container {
   display: flex;
-  width: 1120px;
-  max-height: 640px;
 }
 
   .graph {
     background-color: #EFEFEF;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-y: hidden;
+    overflow-x: scroll;
     position: relative;
   }
 

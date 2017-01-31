@@ -28,25 +28,46 @@ let sizes$ = just(sizes)
 let coords$ = just(coords)
 
 export default function main ({ DOM }) {
-  let { DOM: sliderVDom$, value: sliderValue$ } = Slider({
-    DOM,
-    props: just({ label: 'Point size', unit: 'px', min: 2, value: 6, max: 10 })
+  let { isolateSource, isolateSink } = DOM
+
+  let {
+    DOM: pointSizeSlider,
+    value: pointSizeSliderValue$
+  } = Slider({
+    DOM: isolateSource(DOM, 'pointerSize'),
+    props: just({ label: 'Point Size', unit: 'px', min: 2, value: 6, max: 10 })
   })
-  let { DOM: graphVDom$ } = Graph({
+
+  let {
+    DOM: pointDistanceSlider,
+    value: pointDistanceSliderValue$
+  } = Slider({
+    DOM: isolateSource(DOM, 'pointerDistance'),
+    props: just({ label: 'Distance Size', unit: 'px', min: 1, value: 1, max: 100 })
+  })
+
+  let {
+    DOM: graphVDom$
+  } = Graph({
     DOM,
-    pointSize: sliderValue$,
+    pointSize: pointSizeSliderValue$,
+    pointDistance: pointDistanceSliderValue$,
     points: points$,
     sizes: sizes$,
     coords: coords$
   })
 
+  let pointerSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
+  let pointerDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
+
   return {
-    DOM: combineArray(Array, [graphVDom$, sliderVDom$])
-      .map(([graphVDom, sliderVDom]) =>
+    DOM: combineArray(Array, [graphVDom$, pointerSizeSliderVDom$, pointerDistanceSliderVDom$])
+      .map(([graphVDom, pointSizeSliderVDom, pointDistanceSliderVDom]) =>
         div('.main_container', [
           div('graphviz'),
           graphVDom,
-          sliderVDom
+          pointSizeSliderVDom,
+          pointDistanceSliderVDom
         ])
       )
   }

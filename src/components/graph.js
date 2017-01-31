@@ -3,11 +3,11 @@ import { div } from '@cycle/dom'
 
 let px = size => `${size}px`
 
-let pointStyle = (x, y, size) => ({
-  width: px(size),
-  height: px(size),
-  left: px(x - size / 2),
-  bottom: px(y - size / 2)
+let pointStyle = (x, y, pointSize, pointDistance) => ({
+  width: px(pointSize),
+  height: px(pointSize),
+  left: px((x - pointSize / 2) * pointDistance),
+  bottom: px(y - pointSize / 2)
 })
 
 let graphStyle = ({ gap, width, height }) => ({
@@ -17,13 +17,14 @@ let graphStyle = ({ gap, width, height }) => ({
   height: px(height)
 })
 
-let pointView = (id, x, y, pointSize) =>
-  div('.point', { key: id, attrs: { id: id }, style: pointStyle(x, y, pointSize) })
+let pointView = (id, x, y, pointSize, pointDistance) =>
+  div('.point', { key: id, attrs: { id: id }, style: pointStyle(x, y, pointSize, pointDistance) })
 
 export default function main ({
   DOM,
   points: points$,
   pointSize: pointSize$,
+  pointDistance: pointDistance$,
   sizes: sizes$,
   coords: coords$
 }) {
@@ -51,8 +52,8 @@ export default function main ({
     .startWith(points$)
     .flatMap(x => x)
 
-  let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, sizes$, coords$])
-    .map(([points, pointSize, sizes, coords]) => {
+  let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, pointDistance$, sizes$, coords$])
+    .map(([points, pointSize, pointDistance, sizes, coords]) => {
       return div('.container', [
         div('.graph', { style: graphStyle(sizes) },
           points.map(point => {
@@ -60,7 +61,8 @@ export default function main ({
               point.i,
               coords.getScreenX(point.x),
               coords.getScreenY(point.y),
-              pointSize
+              pointSize,
+              pointDistance
             )
           })
         )
