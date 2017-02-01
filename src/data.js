@@ -1,4 +1,4 @@
-export const test = `
+export let test = `
 2446649.4648,0.605
 2446649.4657,0.609
 2446649.4663,0.607
@@ -25,7 +25,7 @@ export const test = `
 2446649.4916,0.573
 `
 
-export const csv1 = `
+export let csv1 = `
 2446649.4648,0.605
 2446649.4657,0.609
 2446649.4663,0.607
@@ -316,7 +316,7 @@ export const csv1 = `
 2446730.2540,0.355
 `
 
-export const csv2 = `
+export let csv2 = `
 0.2626,0.605
 0.2626,0.605
 0.2625,0.613

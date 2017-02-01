@@ -64,18 +64,25 @@ export default function main ({ DOM }) {
   let pointerSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
   let pointerDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
 
+  let VDom$ = combineArray(Array, [
+    graphVDom$,
+    tableVDom$,
+    pointerSizeSliderVDom$,
+    pointerDistanceSliderVDom$
+  ])
+    .map(([graphVDom, tableVDom, pointSizeSliderVDom, pointDistanceSliderVDom]) =>
+      div('.container', [
+        div('Starman ✨'),
+        div('.graph-container', [
+          graphVDom,
+          tableVDom
+        ]),
+        pointSizeSliderVDom,
+        pointDistanceSliderVDom
+      ])
+    )
+
   return {
-    DOM: combineArray(Array, [graphVDom$, tableVDom$, pointerSizeSliderVDom$, pointerDistanceSliderVDom$])
-      .map(([graphVDom, tableVDom, pointSizeSliderVDom, pointDistanceSliderVDom]) =>
-        div('.container', [
-          div('Starman ✨'),
-          div('.graph-container', [
-            graphVDom,
-            tableVDom
-          ]),
-          pointSizeSliderVDom,
-          pointDistanceSliderVDom
-        ])
-      )
+    DOM: VDom$
   }
 }

@@ -1,17 +1,17 @@
-const fromRange = (min, max) => value => {
+let fromRange = (min, max) => value => {
   if (value < min) return min
   if (value > max) return max
   else return value
 }
 
-const coordFromParams = (points, { width, height, gap }) => {
-  const xs = points.map(p => p.x)
-  const ys = points.map(p => p.y)
-  const xBounds = { min: Math.min(...xs), max: Math.max(...xs) }
-  const yBounds = { min: Math.min(...ys), max: Math.max(...ys) }
-  const xRange = xBounds.max - xBounds.min
-  const yRange = yBounds.max - yBounds.min
-  const fromRangeY = fromRange(yBounds.min, yBounds.max)
+let coordFromParams = (points, { width, height, gap }) => {
+  let xs = points.map(p => p.x)
+  let ys = points.map(p => p.y)
+  let xBounds = { min: Math.min(...xs), max: Math.max(...xs) }
+  let yBounds = { min: Math.min(...ys), max: Math.max(...ys) }
+  let xRange = xBounds.max - xBounds.min
+  let yRange = yBounds.max - yBounds.min
+  let fromRangeY = fromRange(yBounds.min, yBounds.max)
 
   return {
     getScreenX: x => (x - xBounds.min) * width / xRange + gap,
