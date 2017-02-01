@@ -1,13 +1,10 @@
 import { just, combineArray } from 'most'
 import { h2, div } from '@cycle/dom'
+import coordFromParams from 'utils/coords'
 import Graph from 'components/graph'
 import Table from 'components/table'
 import Slider from 'components/slider'
 import Dropzone from 'components/dropzone'
-
-import coordFromParams from 'utils/coords'
-
-import { csv2 as data } from 'data'
 
 let sizes = {
   width: 800,
@@ -15,26 +12,24 @@ let sizes = {
   gap: 20
 }
 
-let points = data
-  .trim()
-  .split(/\n/)
-  .map(p => p.split(','))
-  .map(p => ({ x: +p[0], y: +p[1] }))
-  .sort((a, b) => a.x - b.x)
-  .map((p, i) => ({ i, ...p }))
-
-let coords = coordFromParams(points, sizes)
+let processFile = data =>
+  data
+    .trim()
+    .split(/\n/)
+    .map(p => p.split(','))
+    .map(p => ({ x: +p[0], y: +p[1] }))
+    .sort((a, b) => a.x - b.x)
+    .map((p, i) => ({ i, ...p }))
 
 let sizes$ = just(sizes)
-let points$ = just(points)
-let coords$ = just(coords)
 
 export default function main ({ DOM }) {
   let { isolateSource, isolateSink } = DOM
 
-  let { DOM: DropzoneVDom$ } = Dropzone({
-    DOM
-  })
+  let { DOM: dropzoneVDom$, file: file$ } = Dropzone({ DOM })
+
+  let points$ = file$.map(processFile)
+  let coords$ = points$.map(points => coordFromParams(points, sizes))
 
   let { DOM: pointSizeSlider, value: pointSizeSliderValue$ } = Slider({
     DOM: isolateSource(DOM, 'pointerSize'),
@@ -61,30 +56,35 @@ export default function main ({ DOM }) {
     sizes: sizes$
   })
 
-  let pointerSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
-  let pointerDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
+  let pointSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
+  let pointDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
 
   let VDom$ = combineArray(Array, [
-    DropzoneVDom$,
-    graphVDom$,
-    tableVDom$,
-    pointerSizeSliderVDom$,
-    pointerDistanceSliderVDom$
-  ])
-    .map(([DropzoneVDom, graphVDom, tableVDom, pointSizeSliderVDom, pointDistanceSliderVDom]) =>
-      div('.container', [
-        // DropzoneVDom,
-        h2('Starman ✨'),
-        div('.graph-container', [
-          graphVDom,
-          tableVDom
-        ]),
-        div('.sliders-container', [
-          pointSizeSliderVDom,
-          pointDistanceSliderVDom
-        ])
+    dropzoneVDom$,
+    graphVDom$.startWith(null),
+    tableVDom$.startWith(null),
+    pointSizeSliderVDom$,
+    pointDistanceSliderVDom$
+  ]).map(([
+    dropzoneVDom,
+    graphVDom,
+    tableVDom,
+    pointSizeSliderVDom,
+    pointDistanceSliderVDom
+  ]) =>
+    div('.container', [
+      graphVDom ? null : dropzoneVDom,
+      h2('Starman ✨'),
+      div('.graph-container', [
+        graphVDom,
+        tableVDom
+      ]),
+      div('.sliders-container', [
+        pointSizeSliderVDom,
+        pointDistanceSliderVDom
       ])
-    )
+    ])
+  )
 
   return {
     DOM: VDom$
