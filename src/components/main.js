@@ -59,7 +59,7 @@ export default function main ({ DOM }) {
     coords: coords$
   })
 
-  let { DOM: tableVDom$ } = Table({ DOM, props: patchedPoints$ })
+  let { DOM: tableVDom$ } = Table({ DOM, points: patchedPoints$, sizes: sizes$ })
 
   let pointerSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
   let pointerDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
