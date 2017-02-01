@@ -1,15 +1,32 @@
 body {
   margin: 0;
   user-select: none;
+  font-family: monospace, "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter";
 }
 
-pre {
-  margin: 0;
-  padding: 0 10px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  user-select: all;
+h2 {
+  margin: 15px 0;
 }
+
+.dropzone-container {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  background: white;
+}
+
+  .dropzone {
+    border: 10px dashed #CCC;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
 .graph-container {
   display: flex;
@@ -23,6 +40,11 @@ pre {
   }
 
   pre {
+    margin: 0;
+    padding: 0 10px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    user-select: all;
     width: 300px;
     box-sizing: border-box;
   }
@@ -44,3 +66,12 @@ pre {
     .point:active {
       background-color: green !important;
     }
+
+.sliders-container {
+  margin-top: 15px;
+  display: flex;
+}
+
+.sliders-container > * {
+  margin-right: 30px;
+}
