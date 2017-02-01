@@ -1,11 +1,18 @@
 import { just, combineArray } from 'most'
 import { div } from '@cycle/dom'
 import Graph from 'components/graph'
+import Table from 'components/table'
 import Slider from 'components/slider'
 
 import coordFromParams from 'utils/coords'
 
 import { csv2 as data } from 'data'
+
+let sizes = {
+  width: 800,
+  height: 600,
+  gap: 20
+}
 
 let points = data
   .trim()
@@ -15,16 +22,10 @@ let points = data
   .sort((a, b) => a.x - b.x)
   .map((p, i) => ({ i, ...p }))
 
-let sizes = {
-  width: 800,
-  height: 600,
-  gap: 20
-}
-
 let coords = coordFromParams(points, sizes)
 
-let points$ = just(points)
 let sizes$ = just(sizes)
+let points$ = just(points)
 let coords$ = just(coords)
 
 export default function main ({ DOM }) {
@@ -47,7 +48,8 @@ export default function main ({ DOM }) {
   })
 
   let {
-    DOM: graphVDom$
+    DOM: graphVDom$,
+    patchedPoints: patchedPoints$
   } = Graph({
     DOM,
     pointSize: pointSizeSliderValue$,
@@ -57,15 +59,20 @@ export default function main ({ DOM }) {
     coords: coords$
   })
 
+  let { DOM: tableVDom$ } = Table({ DOM, props: patchedPoints$ })
+
   let pointerSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
   let pointerDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
 
   return {
-    DOM: combineArray(Array, [graphVDom$, pointerSizeSliderVDom$, pointerDistanceSliderVDom$])
-      .map(([graphVDom, pointSizeSliderVDom, pointDistanceSliderVDom]) =>
-        div('.main_container', [
-          div('graphviz'),
-          graphVDom,
+    DOM: combineArray(Array, [graphVDom$, tableVDom$, pointerSizeSliderVDom$, pointerDistanceSliderVDom$])
+      .map(([graphVDom, tableVDom, pointSizeSliderVDom, pointDistanceSliderVDom]) =>
+        div('.container', [
+          div('Starman ✨'),
+          div('.graph-container', [
+            graphVDom,
+            tableVDom
+          ]),
           pointSizeSliderVDom,
           pointDistanceSliderVDom
         ])

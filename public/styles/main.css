@@ -6,11 +6,12 @@ body {
 pre {
   margin: 0;
   padding: 0 10px;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   user-select: all;
 }
 
-.container {
+.graph-container {
   display: flex;
 }
 

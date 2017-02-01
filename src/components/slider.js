@@ -1,21 +1,21 @@
 import { div, input } from '@cycle/dom'
 
 export default function Slider (sources) {
-  const { DOM: dom$, props: props$ } = sources
+  let { DOM: dom$, props: props$ } = sources
 
-  const newValue$ = dom$
+  let newValue$ = dom$
     .select('.slider')
     .events('input')
     .map(ev => ev.target.value)
 
-  const state$ = props$
+  let state$ = props$
     .flatMap(props =>
       newValue$
         .map(value => ({ ...props, value }))
         .startWith(props)
     )
 
-  const vdom$ = state$.map(state =>
+  let vdom$ = state$.map(state =>
     div('.labeled-slider', [
       div('.label', `${state.label}: ${state.value}${state.unit}`),
       input('.slider', {

@@ -54,23 +54,21 @@ export default function main ({
 
   let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, pointDistance$, sizes$, coords$])
     .map(([points, pointSize, pointDistance, sizes, coords]) => {
-      return div('.container', [
-        div('.graph', { style: graphStyle(sizes) },
-          points.map(point => {
-            return pointView(
-              point.i,
-              coords.getScreenX(point.x),
-              coords.getScreenY(point.y),
-              pointSize,
-              pointDistance
-            )
-          })
-        )
-      ])
+      return div('.graph', { style: graphStyle(sizes) },
+        points.map(point => {
+          return pointView(
+            point.i,
+            coords.getScreenX(point.x),
+            coords.getScreenY(point.y),
+            pointSize,
+            pointDistance
+          )
+        })
+      )
     })
 
   return {
     DOM: vdom$,
-    points: patchedPoints$
+    patchedPoints: patchedPoints$
   }
 }
