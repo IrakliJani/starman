@@ -1,5 +1,6 @@
-import { div } from '@cycle/dom'
+import { div, button } from '@cycle/dom'
 import { merge, fromPromise, just } from 'most'
+import sampleData from 'samples/data'
 
 let preventDefault = event => {
   event.preventDefault()
@@ -20,6 +21,7 @@ let processFile = event =>
 
 export default function Dropzone ({ DOM }) {
   let container = DOM.select('.dropzone-container')
+  let btn = DOM.select('button')
 
   let start$ = container.events('dragstart')
   let enter$ = container.events('dragenter')
@@ -27,15 +29,22 @@ export default function Dropzone ({ DOM }) {
   let leave$ = container.events('dragleave')
   let drop$ = container.events('drop')
 
-  let file$ = merge(start$, enter$, over$, leave$, drop$)
+  let buttonClick$ = btn.events('click')
+
+  let processedFile$ = merge(start$, enter$, over$, leave$, drop$)
     .map(preventDefault)
     .filter(event => event.type === 'drop')
     .flatMap(processFile)
 
+  let sampleFile$ = buttonClick$.map(() => sampleData)
+
+  let file$ = merge(processedFile$, sampleFile$)
+
   let VDom$ = just(
     div('.dropzone-container', [
       div('.dropzone', [
-        div('Drag files here...')
+        div('Drag .dat files here...'),
+        button('or just load sample')
       ])
     ])
   )
