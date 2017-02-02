@@ -38,7 +38,9 @@ export default function Dropzone ({ DOM }) {
 
   let sampleFile$ = buttonClick$.map(() => sampleData)
 
-  let file$ = merge(processedFile$, sampleFile$)
+  let justData$ = just(sampleData)
+
+  let file$ = merge(processedFile$, sampleFile$, justData$)
 
   let VDom$ = just(
     div('.dropzone-container', [

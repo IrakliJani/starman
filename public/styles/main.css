@@ -9,8 +9,7 @@ body {
 }
 
   h2 {
-    margin: 0;
-    margin: 0 15px 0;
+    margin: 0 0 15px 0;
     box-sizing: content-box;
   }
 
@@ -43,6 +42,32 @@ body {
       font-size: 20px;
     }
 
+  .table-container {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+    .table-container .table {
+      border: 1px solid #EFEFEF;
+      margin-left: 20px;
+      user-select: all;
+      box-sizing: border-box;
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+
+      .table tr td {
+        padding: 5px;
+        border-bottom: 1px solid #EFEFEF;
+        border-right: 1px solid #EFEFEF;
+      }
+
+      .table tr td:first-child {
+        background: #EFEFEF;
+        text-align: right;
+        padding-right: 10px;
+      }
+
   .graph-container {
     display: flex;
   }
@@ -52,16 +77,6 @@ body {
       overflow-y: hidden;
       overflow-x: scroll;
       position: relative;
-    }
-
-    pre {
-      margin: 0;
-      padding: 0 10px;
-      overflow-x: hidden;
-      overflow-y: scroll;
-      user-select: all;
-      width: 300px;
-      box-sizing: border-box;
     }
 
     .graph, .graph.point {

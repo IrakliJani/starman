@@ -33,12 +33,12 @@ export default function main ({ DOM }) {
 
   let { DOM: pointSizeSlider, value: pointSizeSliderValue$ } = Slider({
     DOM: isolateSource(DOM, 'pointerSize'),
-    props: just({ label: 'Point Size', unit: 'px', min: 2, value: 6, max: 10 })
+    props: just({ label: 'Point Size', unit: 'pt', min: 2, value: 6, max: 10 })
   })
 
   let { DOM: pointDistanceSlider, value: pointDistanceSliderValue$ } = Slider({
     DOM: isolateSource(DOM, 'pointerDistance'),
-    props: just({ label: 'Distance Size', unit: 'px', min: 1, value: 1, max: 100 })
+    props: just({ label: 'Distance Size', unit: 'pt', min: 1, value: 1, max: 100 })
   })
 
   let { DOM: graphVDom$, patchedPoints: patchedPoints$ } = Graph({

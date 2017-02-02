@@ -37,7 +37,7 @@ export default function main ({
 
   let patches$ = start$.flatMap(({ target, currentTarget }) => {
     return move$
-      .throttle(10)
+      .throttle(60)
       .until(stop$.take(1))
       .map(({ y }) => ({ i: +target.id, y: y - currentTarget.offsetTop + window.pageYOffset }))
   })
