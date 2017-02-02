@@ -69,6 +69,7 @@ export default function main ({
 
   return {
     DOM: vdom$,
-    patchedPoints: patchedPoints$
+    patchedPoints: patchedPoints$,
+    pointPatches: patches$
   }
 }

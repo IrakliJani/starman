@@ -41,7 +41,7 @@ export default function main ({ DOM }) {
     props: just({ label: 'Distance Size', unit: 'pt', min: 1, value: 1, max: 100 })
   })
 
-  let { DOM: graphVDom$, patchedPoints: patchedPoints$ } = Graph({
+  let { DOM: graphVDom$, patchedPoints: patchedPoints$, pointPatches: pointPatches$ } = Graph({
     DOM,
     pointSize: pointSizeSliderValue$,
     pointDistance: pointDistanceSliderValue$,
@@ -53,6 +53,7 @@ export default function main ({ DOM }) {
   let { DOM: tableVDom$ } = Table({
     DOM,
     points: patchedPoints$,
+    patches: pointPatches$,
     sizes: sizes$
   })
 
