@@ -8,20 +8,19 @@ let preventDefault = event => {
   return event
 }
 
-let fileReaderAsPromised = file => {
-  return new Promise((resolve, reject) => {
+let fileReaderAsPromised = file =>
+  new Promise((resolve, reject) => {
     let reader = new window.FileReader()
     reader.onload = e => resolve(e.target.result)
     reader.readAsText(file)
   })
-}
 
 let processFile = event =>
   fromPromise(fileReaderAsPromised(event.dataTransfer.files[0]))
 
 export default function Dropzone ({ DOM }) {
   let container = DOM.select('.dropzone-container')
-  let btn = DOM.select('button')
+  let btn = DOM.select('button.load')
 
   let start$ = container.events('dragstart')
   let enter$ = container.events('dragenter')
@@ -46,7 +45,7 @@ export default function Dropzone ({ DOM }) {
     div('.dropzone-container', [
       div('.dropzone', [
         div('Drag .dat files here...'),
-        button('or just load sample')
+        button('.load', 'or just load sample')
       ])
     ])
   )

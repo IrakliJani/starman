@@ -5,6 +5,7 @@ import Graph from 'components/graph'
 import Table from 'components/table'
 import Slider from 'components/slider'
 import Dropzone from 'components/dropzone'
+import Download from 'components/download'
 
 let sizes = {
   width: 800,
@@ -57,6 +58,11 @@ export default function main ({ DOM }) {
     sizes: sizes$
   })
 
+  let { DOM: downloadVDom$ } = Download({
+    DOM,
+    patchedPoints: patchedPoints$
+  })
+
   let pointSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
   let pointDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
 
@@ -65,13 +71,15 @@ export default function main ({ DOM }) {
     graphVDom$.startWith(null),
     tableVDom$.startWith(null),
     pointSizeSliderVDom$,
-    pointDistanceSliderVDom$
+    pointDistanceSliderVDom$,
+    downloadVDom$
   ]).map(([
     dropzoneVDom,
     graphVDom,
     tableVDom,
     pointSizeSliderVDom,
-    pointDistanceSliderVDom
+    pointDistanceSliderVDom,
+    downloadVDom
   ]) =>
     div('.container', [
       graphVDom ? null : dropzoneVDom,
@@ -80,9 +88,10 @@ export default function main ({ DOM }) {
         graphVDom,
         tableVDom
       ]),
-      div('.sliders-container', [
+      div('.controls-container', [
         pointSizeSliderVDom,
-        pointDistanceSliderVDom
+        pointDistanceSliderVDom,
+        downloadVDom
       ])
     ])
   )

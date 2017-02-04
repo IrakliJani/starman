@@ -35,37 +35,38 @@ export default function main ({
   let move$ = container.events('mousemove')
   let stop$ = container.events('mouseup')
 
-  let patches$ = start$.flatMap(({ target, currentTarget }) => {
-    return move$
-      .throttle(60)
-      .until(stop$.take(1))
-      .map(({ y }) => ({ i: +target.id, y: y - currentTarget.offsetTop + window.pageYOffset }))
-  })
+  let patches$ = start$
+    .flatMap(({ target, currentTarget }) =>
+      move$
+        .throttle(60)
+        .until(stop$.take(1))
+        .map(({ y }) => ({ i: +target.id, y: y - currentTarget.offsetTop + window.pageYOffset }))
+    )
 
   let patchedPoints$ = combineArray(Array, [points$, coords$])
-    .map(([points, coords]) => {
-      return patches$.map(patch => {
+    .map(([points, coords]) =>
+      patches$.map(patch => {
         points[patch.i].y = coords.getPointY(patch.y)
         return points
       })
-    })
+    )
     .startWith(points$)
     .flatMap(x => x)
 
   let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, pointDistance$, sizes$, coords$])
-    .map(([points, pointSize, pointDistance, sizes, coords]) => {
-      return div('.graph', { style: graphStyle(sizes) },
-        points.map(point => {
-          return pointView(
+    .map(([points, pointSize, pointDistance, sizes, coords]) =>
+      div('.graph', { style: graphStyle(sizes) },
+        points.map(point =>
+          pointView(
             point.i,
             coords.getScreenX(point.x),
             coords.getScreenY(point.y),
             pointSize,
             pointDistance
           )
-        })
+        )
       )
-    })
+    )
 
   return {
     DOM: vdom$,
