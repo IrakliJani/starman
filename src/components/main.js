@@ -72,7 +72,7 @@ export default function main ({ DOM }) {
     tableVDom$.startWith(null),
     pointSizeSliderVDom$,
     pointDistanceSliderVDom$,
-    downloadVDom$
+    downloadVDom$.startWith(null)
   ]).map(([
     dropzoneVDom,
     graphVDom,
