@@ -5,14 +5,12 @@ body {
 }
 
 .container {
+  width: 100%;
+  height: 100vh;
   padding: 20px;
-  display: inline-block;
+  box-sizing: border-box;
+  display: flex;
 }
-
-  h2 {
-    margin: 0 0 15px 0;
-    box-sizing: content-box;
-  }
 
   .dropzone-container {
     z-index: 1;
@@ -48,70 +46,94 @@ body {
       font-size: 20px;
     }
 
-  .table {
-    border: 1px solid #EFEFEF;
-    font-size: 12px;
-    margin-left: 20px;
-    box-sizing: border-box;
-    border-spacing: 0;
-    border-collapse: collapse;
-    display: block;
-    overflow-x: scroll;
-  }
-
-    .table tr td {
-      padding: 5px;
-      border-bottom: 1px solid #EFEFEF;
-      border-right: 1px solid #EFEFEF;
-    }
-
-    .table tr td:first-child {
-      background: #EFEFEF;
-      text-align: right;
-      padding-right: 10px;
-    }
-
-    @keyframes pop {
-      from { background-color: rgba(70, 240, 0, 0.7); }
-      to { background-color: transparent; }
-    }
-
-    .table tr td.animated {
-      animation: pop 500ms linear;
-    }
-
-  .graph-container {
+  .graph-and-table-container {
     display: flex;
+    width: 100%;
+    flex-direction: column;
   }
 
-    .graph {
-      background-color: #EFEFEF;
-      overflow-y: hidden;
-      overflow-x: scroll;
-      position: relative;
+    .graph-header {
+      flex: 0;
+      margin-bottom: 15px;
     }
 
-    .graph, .graph.point {
-      cursor: crosshair;
+    .graph-header h2 {
+      margin: 0;
     }
 
-      .point {
-        position: absolute;
-        background-color: black;
-        border-radius: 50%;
+    .graph-with-table {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+    }
+
+      .graph-container {
+        flex: 1;
       }
 
-      .point:hover {
-        background-color: red;
+        .graph {
+          background-color: #EFEFEF;
+          overflow-y: hidden;
+          overflow-x: scroll;
+          position: relative;
+          height: 100%;
+          box-sizing: border-box;
+        }
+
+        .graph, .graph.point {
+          cursor: crosshair;
+        }
+
+          .point {
+            position: absolute;
+            background-color: black;
+            border-radius: 50%;
+          }
+
+          .point:hover {
+            background-color: red;
+          }
+
+          .point:active {
+            background-color: green;
+          }
+
+      .table {
+        border: 1px solid #EFEFEF;
+        font-size: 12px;
+        margin-left: 20px;
+        box-sizing: border-box;
+        border-spacing: 0;
+        border-collapse: collapse;
+        display: block;
+        overflow-x: scroll;
       }
 
-      .point:active {
-        background-color: green;
-      }
+        .table tr td {
+          padding: 5px;
+          border-bottom: 1px solid #EFEFEF;
+          border-right: 1px solid #EFEFEF;
+        }
+
+        .table tr td:first-child {
+          background: #EFEFEF;
+          text-align: right;
+          padding-right: 10px;
+        }
+
+        @keyframes pop {
+          from { background-color: rgba(70, 240, 0, 0.7); }
+          to { background-color: transparent; }
+        }
+
+        .table tr td.animated {
+          animation: pop 500ms linear;
+        }
 
   .controls-container {
-    margin-top: 15px;
+    flex-grow: 0;
     display: flex;
+    margin-top: 15px;
   }
 
   .controls-container > *:not(:last-child) {

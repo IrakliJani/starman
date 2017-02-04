@@ -1,5 +1,6 @@
-import { combineArray } from 'most'
+import { combineArray, just } from 'most'
 import { div } from '@cycle/dom'
+import coordFromParams from 'utils/coords'
 
 let px = size => `${size}px`
 
@@ -10,30 +11,31 @@ let pointStyle = (x, y, pointSize, pointDistance) => ({
   bottom: px(y - pointSize / 2)
 })
 
-let graphStyle = ({ gap, width, height }) => ({
-  padding: px(gap),
-  minWidth: px(width),
-  maxWidth: px(width),
-  height: px(height)
-})
-
 let pointView = (id, x, y, pointSize, pointDistance) =>
   div('.point', { key: id, attrs: { id: id }, style: pointStyle(x, y, pointSize, pointDistance) })
 
+const GAP = 20
+
 export default function main ({
   DOM,
+  sizes: sizes$,
   points: points$,
   pointSize: pointSize$,
-  pointDistance: pointDistance$,
-  sizes: sizes$,
-  coords: coords$
+  pointDistance: pointDistance$
 }) {
   let container = DOM.select('.graph')
 
-  let start$ = container.events('mousedown')
-    .filter(ev => ev.target.className === 'point')
+  let start$ = container.events('mousedown').filter(ev => ev.target.className === 'point')
   let move$ = container.events('mousemove')
   let stop$ = container.events('mouseup')
+
+  let coords$ = combineArray(Array, [points$, sizes$])
+    .map(([points, sizes]) =>
+      coordFromParams(points, {
+        ...sizes,
+        gap: GAP
+      })
+    )
 
   let patches$ = start$
     .flatMap(({ target, currentTarget }) =>
@@ -53,9 +55,9 @@ export default function main ({
     .startWith(points$)
     .flatMap(x => x)
 
-  let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, pointDistance$, sizes$, coords$])
-    .map(([points, pointSize, pointDistance, sizes, coords]) =>
-      div('.graph', { style: graphStyle(sizes) },
+  let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, pointDistance$, coords$])
+    .map(([points, pointSize, pointDistance, coords]) =>
+      div('.graph', { style: { padding: px(GAP) } },
         points.map(point =>
           pointView(
             point.i,

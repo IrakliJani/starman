@@ -5,8 +5,7 @@ export default function Table (sources) {
   let {
     DOM,
     patches: patches$,
-    points: points$,
-    sizes: sizes$
+    points: points$
   } = sources
 
   patches$
@@ -29,18 +28,17 @@ export default function Table (sources) {
 
   let state$ = merge(points$.take(1), points$.debounce(120))
 
-  let vdom$ = combineArray(Array, [state$, sizes$])
-    .map(([points, sizes]) =>
-      table('.table', { style: { height: `${sizes.height + sizes.gap * 2}px` } },
-        points.map(point =>
-          tr([
-            td(point.i.toString()),
-            td(point.x.toFixed(5)),
-            td({ key: `x:${point.x}:${point.y}` }, point.y.toFixed(5))
-          ])
-        )
+  let vdom$ = state$.map(points =>
+    table('.table',
+      points.map(point =>
+        tr([
+          td(point.i.toString()),
+          td(point.x.toFixed(5)),
+          td({ key: `x:${point.x}:${point.y}` }, point.y.toFixed(5))
+        ])
       )
     )
+  )
 
   return {
     DOM: vdom$

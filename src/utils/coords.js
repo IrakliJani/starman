@@ -4,7 +4,9 @@ let fromRange = (min, max) => value => {
   else return value
 }
 
-let coordFromParams = (points, { width, height, gap }) => {
+let coordFromParams = (points, { width: w, height: h, gap }) => {
+  let width = w - gap * 2
+  let height = h - gap * 2
   let xs = points.map(p => p.x)
   let ys = points.map(p => p.y)
   let xBounds = { min: Math.min(...xs), max: Math.max(...xs) }

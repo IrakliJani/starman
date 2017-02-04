@@ -46,7 +46,7 @@ export default function Dropzone ({ DOM }) {
   let VDom$ = dragOver$.startWith(false).map(active =>
     div('.dropzone-container', [
       div('.dropzone', { class: { 'dropzone-active': active } }, [
-        div('Drag .dat files here...'),
+        div('Drag .csv files here...'),
         button('.load', 'or just load sample')
       ])
     ])

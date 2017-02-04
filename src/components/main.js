@@ -1,6 +1,5 @@
-import { just, combineArray } from 'most'
+import { just, combineArray, fromEvent } from 'most'
 import { h2, div } from '@cycle/dom'
-import coordFromParams from 'utils/coords'
 import { fromCSV } from 'utils/csv'
 import Graph from 'components/graph'
 import Table from 'components/table'
@@ -8,21 +7,22 @@ import Slider from 'components/slider'
 import Dropzone from 'components/dropzone'
 import Download from 'components/download'
 
-let sizes = {
-  width: 800,
-  height: 600,
-  gap: 20
-}
-
-let sizes$ = just(sizes)
-
 export default function main ({ DOM }) {
   let { isolateSource, isolateSink } = DOM
 
   let { DOM: dropzoneVDom$, file: file$ } = Dropzone({ DOM })
 
   let points$ = file$.map(fromCSV)
-  let coords$ = points$.map(points => coordFromParams(points, sizes))
+
+  let resize$ = fromEvent('resize', window).startWith()
+
+  let graphContainer$ = DOM.select('.graph-container').elements()
+    .map(x => x[0])
+    .filter(Boolean)
+  
+  let sizes$ = combineArray(Array, [resize$, graphContainer$.take(1)])
+    .debounce(100)
+    .map(([_, element]) => ({ width: element.offsetWidth, height: element.offsetHeight }))
 
   let { DOM: pointSizeSlider, value: pointSizeSliderValue$ } = Slider({
     DOM: isolateSource(DOM, 'pointerSize'),
@@ -39,21 +39,12 @@ export default function main ({ DOM }) {
     pointSize: pointSizeSliderValue$,
     pointDistance: pointDistanceSliderValue$,
     points: points$,
-    sizes: sizes$,
-    coords: coords$
-  })
-
-  let { DOM: tableVDom$ } = Table({
-    DOM,
-    points: patchedPoints$,
-    patches: pointPatches$,
     sizes: sizes$
   })
 
-  let { DOM: downloadVDom$ } = Download({
-    DOM,
-    patchedPoints: patchedPoints$
-  })
+  let { DOM: tableVDom$ } = Table({ DOM, points: patchedPoints$, patches: pointPatches$ })
+  
+  let { DOM: downloadVDom$ } = Download({ DOM, patchedPoints: patchedPoints$ })
 
   let pointSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
   let pointDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')
@@ -64,26 +55,30 @@ export default function main ({ DOM }) {
     tableVDom$.startWith(null),
     pointSizeSliderVDom$,
     pointDistanceSliderVDom$,
-    downloadVDom$.startWith(null)
+    downloadVDom$.startWith(null),
+    points$.startWith(null)
   ]).map(([
     dropzoneVDom,
     graphVDom,
     tableVDom,
     pointSizeSliderVDom,
     pointDistanceSliderVDom,
-    downloadVDom
+    downloadVDom,
+    points
   ]) =>
     div('.container', [
-      graphVDom ? null : dropzoneVDom,
-      h2('Starman ✨'),
-      div('.graph-container', [
-        graphVDom,
-        tableVDom
-      ]),
-      div('.controls-container', [
-        pointSizeSliderVDom,
-        pointDistanceSliderVDom,
-        downloadVDom
+      !points && dropzoneVDom,
+      points && div('.graph-and-table-container', [
+        div('.graph-header', [h2('Starman ✨')]),
+        div('.graph-with-table', [
+          div('.graph-container', [graphVDom]),
+          tableVDom
+        ]),
+        div('.controls-container', [
+          pointSizeSliderVDom,
+          pointDistanceSliderVDom,
+          downloadVDom
+        ])
       ])
     ])
   )
