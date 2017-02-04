@@ -1,6 +1,7 @@
 import { just, combineArray } from 'most'
 import { h2, div } from '@cycle/dom'
 import coordFromParams from 'utils/coords'
+import { fromCSV } from 'utils/csv'
 import Graph from 'components/graph'
 import Table from 'components/table'
 import Slider from 'components/slider'
@@ -13,15 +14,6 @@ let sizes = {
   gap: 20
 }
 
-let processFile = data =>
-  data
-    .trim()
-    .split(/\n/)
-    .map(p => p.split(','))
-    .map(p => ({ x: +p[0], y: +p[1] }))
-    .sort((a, b) => a.x - b.x)
-    .map((p, i) => ({ i, ...p }))
-
 let sizes$ = just(sizes)
 
 export default function main ({ DOM }) {
@@ -29,7 +21,7 @@ export default function main ({ DOM }) {
 
   let { DOM: dropzoneVDom$, file: file$ } = Dropzone({ DOM })
 
-  let points$ = file$.map(processFile)
+  let points$ = file$.map(fromCSV)
   let coords$ = points$.map(points => coordFromParams(points, sizes))
 
   let { DOM: pointSizeSlider, value: pointSizeSliderValue$ } = Slider({
