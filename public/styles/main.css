@@ -28,6 +28,7 @@ body {
 
     .dropzone {
       border: 10px dashed #CCC;
+      transition: border-color 200ms;
       height: 100%;
       box-sizing: border-box;
       border-radius: 20px;
@@ -36,6 +37,10 @@ body {
       justify-content: center;
       align-items: center;
       font-size: 30px;
+    }
+
+    .dropzone-active {
+      border: 10px dashed #666;
     }
 
     .dropzone button {

@@ -28,10 +28,12 @@ export default function Dropzone ({ DOM }) {
   let leave$ = container.events('dragleave')
   let drop$ = container.events('drop')
 
+  let events$ = merge(start$, enter$, over$, leave$, drop$).map(preventDefault)
+  let dragOver$ = events$.map(({ type }) => type === 'dragover')
+
   let buttonClick$ = btn.events('click')
 
-  let processedFile$ = merge(start$, enter$, over$, leave$, drop$)
-    .map(preventDefault)
+  let processedFile$ = events$
     .filter(event => event.type === 'drop')
     .flatMap(processFile)
 
@@ -41,9 +43,9 @@ export default function Dropzone ({ DOM }) {
 
   let file$ = merge(processedFile$, sampleFile$) //, justData$)
 
-  let VDom$ = just(
+  let VDom$ = dragOver$.startWith(false).map(active =>
     div('.dropzone-container', [
-      div('.dropzone', [
+      div('.dropzone', { class: { 'dropzone-active': active } }, [
         div('Drag .dat files here...'),
         button('.load', 'or just load sample')
       ])
