@@ -19,7 +19,7 @@ export default function main ({ DOM }) {
   let graphContainer$ = DOM.select('.graph-container').elements()
     .map(x => x[0])
     .filter(Boolean)
-  
+
   let sizes$ = combineArray(Array, [resize$, graphContainer$.take(1)])
     .debounce(100)
     .map(([_, element]) => ({ width: element.offsetWidth, height: element.offsetHeight }))
@@ -43,7 +43,7 @@ export default function main ({ DOM }) {
   })
 
   let { DOM: tableVDom$ } = Table({ DOM, points: patchedPoints$, patches: pointPatches$ })
-  
+
   let { DOM: downloadVDom$ } = Download({ DOM, patchedPoints: patchedPoints$ })
 
   let pointSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')

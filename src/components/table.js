@@ -1,5 +1,5 @@
 import { table, tr, td } from '@cycle/dom'
-import { merge, combineArray } from 'most'
+import { merge } from 'most'
 
 export default function Table (sources) {
   let {

@@ -1,4 +1,4 @@
-import { combineArray, just } from 'most'
+import { combineArray } from 'most'
 import { div } from '@cycle/dom'
 import coordFromParams from 'utils/coords'
 
@@ -30,12 +30,7 @@ export default function main ({
   let stop$ = container.events('mouseup')
 
   let coords$ = combineArray(Array, [points$, sizes$])
-    .map(([points, sizes]) =>
-      coordFromParams(points, {
-        ...sizes,
-        gap: GAP
-      })
-    )
+    .map(([points, sizes]) => coordFromParams(points, { ...sizes, gap: GAP }))
 
   let patches$ = start$
     .flatMap(({ target, currentTarget }) =>
