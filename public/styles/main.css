@@ -22,7 +22,7 @@ body {
 }
 
   .dropzone-container {
-    z-index: 1;
+    z-index: 10;
     position: absolute;
     left: 0;
     top: 0;
@@ -99,11 +99,13 @@ body {
           }
 
           .point:hover {
-            background-color: var(--main-red-color);
+            background-color: var(--main-green-color);
+            z-index: 1;
           }
 
           .point:active {
-            background-color: var(--main-green-color);
+            background-color: var(--main-red-color);
+            z-index: 2;
           }
 
       .table {
