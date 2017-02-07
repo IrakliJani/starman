@@ -1,5 +1,5 @@
 import { just, combineArray, fromEvent } from 'most'
-import { h2, div } from '@cycle/dom'
+import { img, div } from '@cycle/dom'
 import { fromCSV } from 'utils/csv'
 import Graph from 'components/graph'
 import Table from 'components/table'
@@ -70,7 +70,10 @@ export default function main ({ DOM }) {
     div('.container', [
       !points && dropzoneVDom,
       points && div('.graph-and-table-container', [
-        div('.graph-header', [h2('Starman ✨')]),
+        div('.graph-header', [
+          div('Starman'),
+          img({ attrs: { src: '/icon.png' } })
+        ]),
         div('.graph-with-table', [
           div('.graph-container', [graphVDom]),
           tableVDom

@@ -65,8 +65,17 @@ body {
       margin-bottom: 15px;
     }
 
-    .graph-header h2 {
-      margin: 0;
+    .graph-header div {
+      display: inline-block;
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+    .graph-header img {
+      position: relative;
+      top: 4px;
+      height: 24px;
+      width: 24px;
     }
 
     .graph-with-table {
