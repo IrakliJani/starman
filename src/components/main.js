@@ -72,7 +72,7 @@ export default function main ({ DOM }) {
       points && div('.graph-and-table-container', [
         div('.graph-header', [
           div('Starman'),
-          img({ attrs: { src: '/icon.png' } })
+          img({ attrs: { src: './icon.png' } })
         ]),
         div('.graph-with-table', [
           div('.graph-container', [graphVDom]),
