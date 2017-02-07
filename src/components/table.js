@@ -15,11 +15,11 @@ export default function Table (sources) {
       DOM.select('.table').elements()
         .take(1)
         .map(([table]) =>
-          DOM.select(`.table tr:nth-child(${patch.i + 1}) td:last-child`).elements()
+          DOM.select(`.table tr:nth-child(${patch.i + 1}) td:first-child`).elements()
             .take(1)
             .map(elements => elements[0])
             .forEach(td => {
-              table.scrollTop = td.offsetTop
+              table.scrollTop = td.offsetTop + 1
               td.className = 'animated'
             })
         )
@@ -32,9 +32,9 @@ export default function Table (sources) {
     table('.table',
       points.map(point =>
         tr([
-          td(point.i.toString()),
+          td({ key: `x:${point.x}:${point.y}` }, point.i.toString()),
           td(point.x.toFixed(5)),
-          td({ key: `x:${point.x}:${point.y}` }, point.y.toFixed(5))
+          td(point.y.toFixed(5))
         ])
       )
     )

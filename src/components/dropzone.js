@@ -1,5 +1,5 @@
 import { div, button } from '@cycle/dom'
-import { merge, fromPromise, just } from 'most'
+import { merge, fromPromise } from 'most'
 import sampleData from 'samples/data'
 
 let preventDefault = event => {
@@ -10,9 +10,17 @@ let preventDefault = event => {
 
 let fileReaderAsPromised = file =>
   new Promise((resolve, reject) => {
-    let reader = new window.FileReader()
-    reader.onload = e => resolve(e.target.result)
-    reader.readAsText(file)
+    if (file.type !== 'text/csv') {
+      reject('File type must be a CSV')
+    } else {
+      let reader = new window.FileReader()
+      reader.onload = event =>
+        resolve({
+          name: file.name.replace(/\.csv$/, ''),
+          content: event.target.result
+        })
+      reader.readAsText(file)
+    }
   })
 
 let processFile = event =>
@@ -37,7 +45,10 @@ export default function Dropzone ({ DOM }) {
     .filter(event => event.type === 'drop')
     .flatMap(processFile)
 
-  let sampleFile$ = buttonClick$.map(() => sampleData)
+  let sampleFile$ = buttonClick$.map(() => ({
+    name: 'sample',
+    content: sampleData
+  }))
 
   // let justData$ = just(sampleData)
 

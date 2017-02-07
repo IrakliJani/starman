@@ -12,7 +12,8 @@ export default function main ({ DOM }) {
 
   let { DOM: dropzoneVDom$, file: file$ } = Dropzone({ DOM })
 
-  let points$ = file$.map(fromCSV)
+  let points$ = file$.map(file => file.content).map(fromCSV)
+  let fileName$ = file$.map(file => file.name)
 
   let resize$ = fromEvent('resize', window).startWith()
 
@@ -44,7 +45,7 @@ export default function main ({ DOM }) {
 
   let { DOM: tableVDom$ } = Table({ DOM, points: patchedPoints$, patches: pointPatches$ })
 
-  let { DOM: downloadVDom$ } = Download({ DOM, patchedPoints: patchedPoints$ })
+  let { DOM: downloadVDom$ } = Download({ DOM, patchedPoints: patchedPoints$, fileName: fileName$ })
 
   let pointSizeSliderVDom$ = isolateSink(pointSizeSlider, 'pointerSize')
   let pointDistanceSliderVDom$ = isolateSink(pointDistanceSlider, 'pointerDistance')

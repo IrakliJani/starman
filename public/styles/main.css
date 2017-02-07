@@ -1,3 +1,12 @@
+:root {
+  --main-bg-color: rgba(200, 220, 240, 0.2);
+  --main-green-color: rgb(100, 255, 100);
+  --main-red-color: rgb(255, 100, 100);
+  --table-border-color: rgba(200, 220, 240, 0.4);
+  --dropzone-border-color: rgba(200, 220, 240, 0.8);
+  --dropzone-border-color-active: rgb(200, 220, 240);
+}
+
 body {
   margin: 0;
   user-select: none;
@@ -21,11 +30,10 @@ body {
     height: 100vh;
     padding: 20px;
     box-sizing: border-box;
-    background: white;
   }
 
     .dropzone {
-      border: 10px dashed #CCC;
+      border: 10px dashed var(--dropzone-border-color);
       transition: border-color 200ms;
       height: 100%;
       box-sizing: border-box;
@@ -38,7 +46,7 @@ body {
     }
 
     .dropzone-active {
-      border: 10px dashed #666;
+      border: 10px dashed var(--dropzone-border-color-active);
     }
 
     .dropzone button {
@@ -72,7 +80,7 @@ body {
       }
 
         .graph {
-          background-color: #EFEFEF;
+          background-color: var(--main-bg-color);
           overflow-y: hidden;
           overflow-x: scroll;
           position: relative;
@@ -91,15 +99,17 @@ body {
           }
 
           .point:hover {
-            background-color: red;
+            background-color: var(--main-red-color);
           }
 
           .point:active {
-            background-color: green;
+            background-color: var(--main-green-color);
           }
 
       .table {
-        border: 1px solid #EFEFEF;
+        border: 1px solid var(--table-border-color);
+        border-right: 0;
+        border-bottom: 0;
         font-size: 12px;
         margin-left: 20px;
         box-sizing: border-box;
@@ -111,18 +121,18 @@ body {
 
         .table tr td {
           padding: 5px;
-          border-bottom: 1px solid #EFEFEF;
-          border-right: 1px solid #EFEFEF;
+          border-bottom: 1px solid var(--table-border-color);
+          border-right: 1px solid var(--table-border-color);
         }
 
         .table tr td:first-child {
-          background: #EFEFEF;
+          background: var(--main-bg-color);
           text-align: right;
           padding-right: 10px;
         }
 
         @keyframes pop {
-          from { background-color: rgba(70, 240, 0, 0.7); }
+          from { background-color: var(--main-green-color) }
           to { background-color: transparent; }
         }
 
