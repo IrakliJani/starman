@@ -45,5 +45,5 @@ jspm_packages
 # Output of 'npm pack'
 *.tgz
 
-build
-public/bundle.js
+dist
+.DS_Store

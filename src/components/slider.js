@@ -1,6 +1,6 @@
 import { div, input } from '@cycle/dom'
 
-export default function Slider (sources) {
+export default function Slider(sources) {
   let { DOM: dom$, props: props$ } = sources
 
   let newValue$ = dom$
@@ -8,18 +8,20 @@ export default function Slider (sources) {
     .events('input')
     .map(ev => ev.target.value)
 
-  let state$ = props$
-    .flatMap(props =>
-      newValue$
-        .map(value => ({ ...props, value }))
-        .startWith(props)
-    )
+  let state$ = props$.flatMap(props =>
+    newValue$.map(value => ({ ...props, value })).startWith(props)
+  )
 
   let vdom$ = state$.map(state =>
     div('.labeled-slider', [
       div('.label', `${state.label}: ${state.value}${state.unit}`),
       input('.slider', {
-        attrs: { type: 'range', min: state.min, max: state.max, value: state.value }
+        attrs: {
+          type: 'range',
+          min: state.min,
+          max: state.max,
+          value: state.value
+        }
       })
     ])
   )

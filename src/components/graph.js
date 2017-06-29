@@ -12,11 +12,15 @@ let pointStyle = (x, y, pointSize, pointDistance) => ({
 })
 
 let pointView = (id, x, y, pointSize, pointDistance) =>
-  div('.point', { key: id, attrs: { id: id }, style: pointStyle(x, y, pointSize, pointDistance) })
+  div('.point', {
+    key: id,
+    attrs: { id: id },
+    style: pointStyle(x, y, pointSize, pointDistance)
+  })
 
 const GAP = 20
 
-export default function main ({
+export default function main({
   DOM,
   sizes: sizes$,
   points: points$,
@@ -25,20 +29,25 @@ export default function main ({
 }) {
   let container = DOM.select('.graph')
 
-  let start$ = container.events('mousedown').filter(ev => ev.target.className === 'point')
+  let start$ = container
+    .events('mousedown')
+    .filter(ev => ev.target.className === 'point')
   let move$ = container.events('mousemove')
   let stop$ = container.events('mouseup')
 
-  let coords$ = combineArray(Array, [points$, sizes$])
-    .map(([points, sizes]) => coordFromParams(points, { ...sizes, gap: GAP }))
+  let coords$ = combineArray(Array, [points$, sizes$]).map(([points, sizes]) =>
+    coordFromParams(points, { ...sizes, gap: GAP })
+  )
 
-  let patches$ = start$
-    .flatMap(({ target, currentTarget }) =>
-      move$
-        .throttle(60)
-        .until(stop$.take(1))
-        .map(({ y }) => ({ i: +target.id, y: y - currentTarget.offsetTop + window.pageYOffset }))
-    )
+  let patches$ = start$.flatMap(({ target, currentTarget }) =>
+    move$
+      .throttle(60)
+      .until(stop$.take(1))
+      .map(({ y }) => ({
+        i: +target.id,
+        y: y - currentTarget.offsetTop + window.pageYOffset
+      }))
+  )
 
   let patchedPoints$ = combineArray(Array, [points$, coords$])
     .map(([points, coords]) =>
@@ -50,20 +59,26 @@ export default function main ({
     .startWith(points$)
     .flatMap(x => x)
 
-  let vdom$ = combineArray(Array, [patchedPoints$, pointSize$, pointDistance$, coords$])
-    .map(([points, pointSize, pointDistance, coords]) =>
-      div('.graph', { style: { padding: px(GAP) } },
-        points.map(point =>
-          pointView(
-            point.i,
-            coords.getScreenX(point.x),
-            coords.getScreenY(point.y),
-            pointSize,
-            pointDistance
-          )
+  let vdom$ = combineArray(Array, [
+    patchedPoints$,
+    pointSize$,
+    pointDistance$,
+    coords$
+  ]).map(([points, pointSize, pointDistance, coords]) =>
+    div(
+      '.graph',
+      { style: { padding: px(GAP) } },
+      points.map(point =>
+        pointView(
+          point.i,
+          coords.getScreenX(point.x),
+          coords.getScreenY(point.y),
+          pointSize,
+          pointDistance
         )
       )
     )
+  )
 
   return {
     DOM: vdom$,

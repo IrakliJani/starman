@@ -26,7 +26,7 @@ let fileReaderAsPromised = file =>
 let processFile = event =>
   fromPromise(fileReaderAsPromised(event.dataTransfer.files[0]))
 
-export default function Dropzone ({ DOM }) {
+export default function Dropzone({ DOM }) {
   let container = DOM.select('.dropzone-container')
   let btn = DOM.select('button.load')
 
@@ -54,14 +54,16 @@ export default function Dropzone ({ DOM }) {
 
   let file$ = merge(processedFile$, sampleFile$) //, justData$)
 
-  let VDom$ = dragOver$.startWith(false).map(active =>
-    div('.dropzone-container', [
-      div('.dropzone', { class: { 'dropzone-active': active } }, [
-        div('Drag .csv files here...'),
-        button('.load', 'or just load sample')
+  let VDom$ = dragOver$
+    .startWith(false)
+    .map(active =>
+      div('.dropzone-container', [
+        div('.dropzone', { class: { 'dropzone-active': active } }, [
+          div('Drag .csv files here...'),
+          button('.load', 'or just load sample')
+        ])
       ])
-    ])
-  )
+    )
 
   return {
     DOM: VDom$,

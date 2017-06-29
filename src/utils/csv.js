@@ -9,7 +9,6 @@ let fromCSV = data =>
     .sort((a, b) => a.x - b.x)
     .map((p, i) => ({ ...p, i }))
 
-let toCSV = points =>
-  points.map(point => `${point.x},${point.y}`).join('\n')
+let toCSV = points => points.map(point => `${point.x},${point.y}`).join('\n')
 
 export { fromCSV, toCSV }
