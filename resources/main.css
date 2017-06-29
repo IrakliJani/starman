@@ -50,8 +50,16 @@ body {
     }
 
     .dropzone button {
-      margin-top: 20px;
-      font-size: 20px;
+      font-size: 13px;
+    }
+
+    .dropzone input {
+      margin-top: 30px;
+    }
+
+    .dropzone .or {
+      font-size: 13px;
+      margin: 30px;
     }
 
   .graph-and-table-container {

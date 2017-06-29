@@ -8,6 +8,7 @@ module.exports = {
     path: path.join(__dirname, '/dist'),
     filename: 'resources/bundle.js'
   },
+  devtool: 'eval',
   module: {
     rules: [
       {
