@@ -10,17 +10,17 @@ let preventDefault = event => {
 
 let fileReaderAsPromised = file =>
   new Promise((resolve, reject) => {
-    if (file.type !== 'text/csv') {
-      reject('File type must be a CSV')
-    } else {
-      let reader = new window.FileReader()
-      reader.onload = event =>
-        resolve({
-          name: file.name.replace(/\.csv$/, ''),
-          content: event.target.result
-        })
-      reader.readAsText(file)
-    }
+    // if (file.type !== 'text/csv') {
+    // reject('File type must be a CSV')
+    // } else {
+    let reader = new window.FileReader()
+    reader.onload = event =>
+      resolve({
+        name: file.name.replace(/\.csv$/, ''),
+        content: event.target.result
+      })
+    reader.readAsText(file)
+    // }
   })
 
 let processFileDrop = event =>
@@ -50,8 +50,7 @@ export default function Dropzone({ DOM }) {
     .filter(event => event.type === 'drop')
     .flatMap(processFileDrop)
 
-  let processedInputFile$ = fileInput$
-    .flatMap(processFileInput)
+  let processedInputFile$ = fileInput$.flatMap(processFileInput)
 
   let sampleFile$ = buttonClick$.map(() => ({
     name: 'sample',
@@ -62,20 +61,18 @@ export default function Dropzone({ DOM }) {
 
   let file$ = merge(processedDroppedFile$, processedInputFile$, sampleFile$) //, justData$)
 
-  let VDom$ = dragOver$
-    .startWith(false)
-    .map(active =>
-      div('.dropzone-container', [
-        div('.dropzone', { class: { 'dropzone-active': active } }, [
-          div('Open .csv File'),
-          input('.fileinput', {
-            attrs: { type: 'file' }
-          }),
-          div('.or', '- or -'),
-          button('.load', 'load sample csv')
-        ])
+  let VDom$ = dragOver$.startWith(false).map(active =>
+    div('.dropzone-container', [
+      div('.dropzone', { class: { 'dropzone-active': active } }, [
+        div('Open .csv File'),
+        input('.fileinput', {
+          attrs: { type: 'file' }
+        }),
+        div('.or', '- or -'),
+        button('.load', 'load sample csv')
       ])
-    )
+    ])
+  )
 
   return {
     DOM: VDom$,
