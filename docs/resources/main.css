@@ -1,0 +1,174 @@
+:root {
+  --main-bg-color: rgba(200, 220, 240, 0.2);
+  --main-green-color: rgb(100, 255, 100);
+  --main-red-color: rgb(255, 100, 100);
+  --table-border-color: rgba(200, 220, 240, 0.4);
+  --dropzone-border-color: rgba(200, 220, 240, 0.8);
+  --dropzone-border-color-active: rgb(200, 220, 240);
+}
+
+body {
+  margin: 0;
+  user-select: none;
+  font-family: monospace, "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter";
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+}
+
+  .dropzone-container {
+    z-index: 10;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+    .dropzone {
+      border: 10px dashed var(--dropzone-border-color);
+      transition: border-color 200ms;
+      height: 100%;
+      box-sizing: border-box;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+    }
+
+    .dropzone-active {
+      border: 10px dashed var(--dropzone-border-color-active);
+    }
+
+    .dropzone button {
+      font-size: 13px;
+    }
+
+    .dropzone input {
+      margin-top: 30px;
+    }
+
+    .dropzone .or {
+      font-size: 13px;
+      margin: 30px;
+    }
+
+  .graph-and-table-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  }
+
+    .graph-header {
+      flex: 0;
+      margin-bottom: 15px;
+    }
+
+    .graph-header div {
+      display: inline-block;
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+    .graph-header img {
+      position: relative;
+      top: 4px;
+      height: 24px;
+      width: 24px;
+    }
+
+    .graph-with-table {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+    }
+
+      .graph-container {
+        flex: 1;
+      }
+
+        .graph {
+          background-color: var(--main-bg-color);
+          overflow-y: hidden;
+          overflow-x: scroll;
+          position: relative;
+          height: 100%;
+          box-sizing: border-box;
+        }
+
+        .graph, .graph.point {
+          cursor: crosshair;
+        }
+
+          .point {
+            position: absolute;
+            background-color: black;
+            border-radius: 50%;
+          }
+
+          .point:hover {
+            background-color: var(--main-green-color);
+            z-index: 1;
+          }
+
+          .point:active {
+            background-color: var(--main-red-color);
+            z-index: 2;
+          }
+
+      .table {
+        border: 1px solid var(--table-border-color);
+        border-right: 0;
+        border-bottom: 0;
+        font-size: 12px;
+        margin-left: 20px;
+        box-sizing: border-box;
+        border-spacing: 0;
+        border-collapse: collapse;
+        display: block;
+        overflow-x: scroll;
+      }
+
+        .table tr td {
+          padding: 5px;
+          border-bottom: 1px solid var(--table-border-color);
+          border-right: 1px solid var(--table-border-color);
+        }
+
+        .table tr td:first-child {
+          background: var(--main-bg-color);
+          text-align: right;
+          padding-right: 10px;
+        }
+
+        @keyframes pop {
+          from { background-color: var(--main-green-color) }
+          to { background-color: transparent; }
+        }
+
+        .table tr td.animated {
+          animation: pop 500ms linear;
+        }
+
+  .controls-container {
+    flex-grow: 0;
+    display: flex;
+    margin-top: 15px;
+  }
+
+  .controls-container > *:not(:last-child) {
+    margin-right: 30px;
+  }
+
+    .download {
+      margin-left: auto;
+    }
