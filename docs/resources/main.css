@@ -66,7 +66,6 @@ body {
     display: flex;
     width: 100%;
     flex-direction: column;
-    overflow: hidden;
   }
 
     .graph-header {
@@ -91,6 +90,7 @@ body {
       display: flex;
       flex: 1;
       flex-direction: row;
+      overflow: hidden;
     }
 
       .graph-container {
