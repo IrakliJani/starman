@@ -89,7 +89,7 @@ body {
     .graph-with-table {
       display: flex;
       flex: 1;
-      overflow: none;
+      overflow: hidden;
       flex-direction: row;
     }
 
