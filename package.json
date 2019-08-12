@@ -1,11 +1,10 @@
 {
   "name": "starman",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack",
-    "electron": "npm run build && electron dist/"
+    "build": "webpack"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
@@ -22,18 +21,22 @@
   "dependencies": {
     "@cycle/dom": "14.3.x",
     "@cycle/most-run": "^4.4.0",
-    "most": "1.5.0",
-    "xstream": "^9.3.0"
+    "most": "1.5.0"
   },
   "babel": {
-    "presets": ["es2015", "env"],
+    "presets": [
+      "es2015",
+      "env"
+    ],
     "plugins": [
       "transform-object-rest-spread",
       "transform-export-extensions",
       [
         "module-resolver",
         {
-          "root": ["./src"]
+          "root": [
+            "./src"
+          ]
         }
       ]
     ]
