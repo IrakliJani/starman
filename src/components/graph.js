@@ -44,7 +44,7 @@ export default function main({
       .throttle(60)
       .until(stop$.take(1))
       .map(({ y }) => ({
-        i: +target.id,
+        i: Number(target.id),
         y: y - currentTarget.offsetTop + window.pageYOffset
       }))
   )
