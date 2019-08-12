@@ -5,7 +5,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = {
   entry: ['./src/'],
   output: {
-    path: path.join(__dirname, '/dist'),
+    path: path.join(__dirname, '/docs'),
     filename: 'resources/bundle.js'
   },
   devtool: 'eval',
@@ -24,16 +24,8 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new CopyWebpackPlugin([
       {
-        from: 'electron-package.json',
-        to: 'package.json'
-      },
-      {
         from: 'index.html',
         to: '.'
-      },
-      {
-        from: 'electron.js',
-        to: 'main.js'
       },
       {
         from: 'resources/',
@@ -44,7 +36,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     hot: true,
-    contentBase: './dist',
+    contentBase: './docs',
     stats: 'errors-only',
     noInfo: true,
     inline: true,
