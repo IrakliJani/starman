@@ -89,8 +89,8 @@ body {
     .graph-with-table {
       display: flex;
       flex: 1;
-      flex-direction: row;
       overflow: hidden;
+      flex-direction: row;
     }
 
       .graph-container {
